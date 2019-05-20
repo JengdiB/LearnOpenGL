@@ -12,3 +12,8 @@ target_compile_definitions(stb_image
     PRIVATE
         STB_IMAGE_IMPLEMENTATION
 )
+
+set_target_properties(stb_image PROPERTIES
+    FOLDER
+        externals/stb_image
+)

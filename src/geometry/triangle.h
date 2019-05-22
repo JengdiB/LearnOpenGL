@@ -1,3 +1,5 @@
+#pragma once
+
 #include <glad/glad.h>
 
 #include <iostream>
@@ -5,27 +7,27 @@
 class Triangle
 {
 public:
-	Triangle(float scale, float offset_x = 0.f, float offset_y = 0.f)
+	Triangle(float scale)
 	{
 		float half = (scale / 2.f);
 
 		// lower left
-		m_vertices[0] = -half + offset_x;
-		m_vertices[1] = 0.f + offset_y;
+		m_vertices[0] = -half;
+		m_vertices[1] = -half;
 		m_vertices[2] = 0.f;
 		m_vertices[3] = 0.f; // texture co-ordinate
 		m_vertices[4] = 0.f; // texture co-ordinate
 
 		// lower right
-		m_vertices[5] = half + offset_x;
-		m_vertices[6] = 0.f + offset_y;
+		m_vertices[5] = half;
+		m_vertices[6] = -half;
 		m_vertices[7] = 0.f;
 		m_vertices[8] = 1.f; // texture co-ordinate
 		m_vertices[9] = 0.f; // texture co-ordinate
 
 		// top
-		m_vertices[10] = 0.f + offset_x;
-		m_vertices[11] = scale + offset_y;
+		m_vertices[10] = 0.f;
+		m_vertices[11] = half;
 		m_vertices[12] = 0.f;
 		m_vertices[13] = 0.5f; // texture co-ordinate
 		m_vertices[14] = 1.0f; // texture co-ordinate

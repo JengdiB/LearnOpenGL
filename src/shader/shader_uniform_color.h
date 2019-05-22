@@ -1,3 +1,5 @@
+#pragma once
+
 namespace shader { namespace uniform_color{
 
 const char* vertext_source = R"(#version 330 core
@@ -17,11 +19,11 @@ void main()
 const char* fragment_source = R"(#version 330 core
 out vec4 FragColor;
 
-uniform vec4 ourColor; // we set this variable in the OpenGL code.
+uniform float ourColor; // we set this variable in the OpenGL code.
 
 void main()
 {
-    FragColor = ourColor; // vec4(1.0f, 1.0f, 0.2f, 1.0f);
+    FragColor = vec4(0.f, ourColor, 0.f, 1.f); // vec4(1.0f, 1.0f, 0.2f, 1.0f);
 }
 )";
 }

@@ -5,13 +5,17 @@ set(SRCS
 )
 
 set(HDRS
+	application.h
+	
 	shader/shader.h
 	shader/shader_simple.h
 	shader/shader_uniform_color.h
 
-    geometry/triangle.h
+	geometry/triangle.h
+	
 	texture/texture.h
 
+	transform/transform.h
 )
 
 add_executable(main ${SRCS} ${HDRS})
@@ -20,6 +24,7 @@ target_link_libraries(main
 	PRIVATE
 		glad
 		glfw
+		glm
 		stb_image
 )
 

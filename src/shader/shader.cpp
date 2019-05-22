@@ -1,6 +1,8 @@
 #include "shader.h"
 
 #include <glad/glad.h> // include glad to get all the required OpenGL headers
+#include <glm/gtc/type_ptr.hpp>
+
 #include <iostream>
 
 Shader::Shader(const std::string& vertexShader, const std::string& fragmentShader)
@@ -86,18 +88,24 @@ const std::string& Shader::getLastError() const
 
 void Shader::setBool(const std::string &name, bool value) const
 {
-	int vertexColorLocation = glGetUniformLocation(m_ID, name.c_str());
-	glUniform1i(vertexColorLocation, value ? 1 : 0);
+	int location = glGetUniformLocation(m_ID, name.c_str());
+	glUniform1i(location, value ? 1 : 0);
 }
 
 void Shader::setInt(const std::string &name, int value) const
 {
-	int vertexColorLocation = glGetUniformLocation(m_ID, name.c_str());
-	glUniform1i(vertexColorLocation, value);
+	int location = glGetUniformLocation(m_ID, name.c_str());
+	glUniform1i(location, value);
 }
 
 void Shader::setFloat(const std::string &name, float value) const
 {
-	int vertexColorLocation = glGetUniformLocation(m_ID, name.c_str());
-	glUniform4f(vertexColorLocation, 0.0f, value, 0.0f, 1.0f);
+	int location = glGetUniformLocation(m_ID, name.c_str());
+	glUniform1f(location, value);
+}
+
+void Shader::setMat4(const std::string &name, const glm::mat4& trans) const
+{
+	int location = glGetUniformLocation(m_ID, name.c_str());
+	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(trans));
 }

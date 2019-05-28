@@ -25,7 +25,10 @@ target_link_libraries(main
 		glad
 		glfw
 		glm
+
 		stb_image
+
+		freetype
 )
 
 target_compile_definitions(main

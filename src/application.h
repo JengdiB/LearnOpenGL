@@ -3,6 +3,7 @@
 #include "shader/shader_uniform_color.h"
 
 #include "geometry/triangle.h"
+#include "geometry/cube.h"
 #include "texture/texture.h"
 
 #include "transform/transform.h"
@@ -50,6 +51,10 @@ int application_main(int argc, char** argv)
 	glViewport(0, 0, 800, 600);											// specify size of screen for flagment shader
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);	// register callback when screen size changed
 
+	// configure global opengl state
+    // -----------------------------
+	glEnable(GL_DEPTH_TEST);
+
 	//
 	// Shader
 	//
@@ -73,6 +78,9 @@ int application_main(int argc, char** argv)
 	Triangle triangleB{ 1.f };
 	triangleB.prepare();
 
+	Cube cube{ 1.f };
+	cube.prepare();
+
 	Texture texture_1;
 	if (!texture_1.load("./resources/images/wall.jpg"))
 	{
@@ -95,7 +103,7 @@ int application_main(int argc, char** argv)
 
 		// clear buffer
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// rendering commands
 		// ..
@@ -121,6 +129,11 @@ int application_main(int argc, char** argv)
 		
 		glm::mat4 view = glm::mat4(1.0f);
 		// note that we're translating the scene in the reverse direction of where we want to move
+		
+		float radius = 10.0f;
+		float camX = sin(glfwGetTime()) * radius;
+		float camZ = cos(glfwGetTime()) * radius;
+		view = glm::lookAt(glm::vec3(camX, 0.0, camZ), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
 		view = glm::translate(view, glm::vec3(s_translate_x, 0.0f, -3.0f));
 
 		glm::mat4 projection;
@@ -134,7 +147,7 @@ int application_main(int argc, char** argv)
 
 		model_transform.scale(glm::vec3(s_percentage, s_percentage, 1.f));
 		model_transform.rotateRadian((float)glfwGetTime());
-		model_transform.rotateAxis(glm::vec3(0.0f, 0.0f, 1.0f));
+		model_transform.rotateAxis(glm::vec3(1.0f, 1.0f, .0f));
 
 		simpleShader.setMat4("model_transform", model_transform.getTransform());
 
@@ -142,8 +155,30 @@ int application_main(int argc, char** argv)
 		texture_2.active(1);
 		triangleSimple.draw();
 
-
-
+		glm::vec3 cubePositions[] = {
+			glm::vec3(0.0f,  0.0f,  0.0f),
+			glm::vec3(2.0f,  5.0f, -15.0f),
+			glm::vec3(-1.5f, -2.2f, -2.5f),
+			glm::vec3(-3.8f, -2.0f, -12.3f),
+			glm::vec3(2.4f, -0.4f, -3.5f),
+			glm::vec3(-1.7f,  3.0f, -7.5f),
+			glm::vec3(1.3f, -2.0f, -2.5f),
+			glm::vec3(1.5f,  2.0f, -2.5f),
+			glm::vec3(1.5f,  0.2f, -1.5f),
+			glm::vec3(-1.3f,  1.0f, -1.5f)
+		};
+		for (unsigned int i = 0; i < 10; i++)
+		{
+			glm::mat4 model = glm::mat4(1.0f);
+			model = glm::translate(model, cubePositions[i]);
+			float angle = 20.0f * i;
+			if (i%3)
+				model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+			else
+				model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(1.0f, 0.3f, 0.5f));
+			simpleShader.setMat4("model_transform", model);
+			cube.draw();
+		}
 		// check and call events and swap the buffers
 		glfwSwapBuffers(window);
 		glfwPollEvents();

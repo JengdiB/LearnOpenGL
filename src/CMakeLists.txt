@@ -6,12 +6,13 @@ set(SRCS
 
 set(HDRS
 	application.h
-	
+
 	shader/shader.h
 	shader/shader_simple.h
 	shader/shader_uniform_color.h
 
 	geometry/triangle.h
+	geometry/cube.h
 	
 	texture/texture.h
 
